@@ -1,0 +1,93 @@
+.staff-dashboard {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f6f8;
+}
+
+.sidebar {
+  width: 220px;
+  background: #2f4050;
+  color: white;
+  padding: 20px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin-bottom: 15px;
+}
+
+.sidebar a {
+  color: #d1d5db;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.sidebar a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+main {
+  flex: 1;
+  padding: 30px;
+  background: #ffffff;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+main h1 {
+  font-size: 24px;
+  color: #333;
+}
+
+.process-claim-form {
+  margin-top: 20px;
+}
+
+.process-claim-form input[type="text"] {
+  padding: 8px;
+  font-size: 16px;
+  width: 250px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.process-claim-form button {
+  padding: 8px 14px;
+  background: #4caf50;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.process-claim-form button:hover {
+  background: #45a049;
+}
+
+.success-message {
+  color: green;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.error-message {
+  color: red;
+  margin-top: 15px;
+  font-weight: bold;
+}
