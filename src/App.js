@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AddProduct from "./pages/AddProduct";
 import Cart from "./pages/Cart";
-import ContactUs from "./pages/Contact";
+import ContactUs from "./pages/MyReviews";
 import ViewProducts from "./pages/ViewProducts";
 import AdminLayout from "./pages/AdminLayout";
 import Bookmarks from "./pages/Bookmark";
@@ -54,7 +54,7 @@ function App() {
           <Route path="/bookmarks" element={<PrivateRoute><Bookmarks /></PrivateRoute>} />
           <Route path="/order-bill" element={<PrivateRoute><OrderBill /></PrivateRoute>} />
           <Route path="/orders" element={<PrivateRoute><OrderHistory /></PrivateRoute>} />
-
+          
           {/* PRODUCT DETAILS */}
           <Route path="/products/:id" element={<ProductDetails />} />
 
