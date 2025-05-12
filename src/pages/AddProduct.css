@@ -1,12 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
 .add-product-container {
   max-width: 1100px;
   margin: 40px auto;
   padding: 0 20px;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: #f8fff9;
 }
 
-/* 🔘 Form Toggle & Signout Container */
+/* Form Toggle & Signout Container */
 .top-bar {
   display: flex;
   justify-content: space-between;
@@ -15,7 +17,7 @@
   margin-bottom: 20px;
 }
 
-/* 🔘 Add Product Button */
+/* Add Product Button */
 .btn-toggle-form {
   background-color: #f59e0b;
   color: white;
@@ -30,13 +32,14 @@
   align-items: center;
   gap: 6px;
   margin-top: 10px;
+  font-family: "Poppins", sans-serif;
 }
 
 .btn-toggle-form:hover {
   background-color: #d97706;
 }
 
-/* 🔻 Sign Out Button */
+/* Sign Out Button */
 .btn-signout {
   background-color: #ef4444;
   color: white;
@@ -48,43 +51,49 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Poppins", sans-serif;
 }
 
 .btn-signout:hover {
   background-color: #dc2626;
 }
 
-/* 📦 Product Form Card */
+/* Product Form Card */
 .add-product-card {
   background-color: #fffdf4;
   border: 1px solid #fde68a;
   border-radius: 12px;
-  padding: 24px;
   box-shadow: 0 2px 12px rgba(251, 191, 36, 0.15);
   margin-bottom: 30px;
+  overflow: hidden;
 }
 
-/* 🧾 Header */
+/* Header */
 .add-product-header {
   background: linear-gradient(to right, #f59e0b, #d97706);
   color: white;
   padding: 24px 30px;
-  border-radius: 12px 12px 0 0;
+  border-radius: 0;
 }
 
 .add-product-header h3 {
   margin: 0 0 8px 0;
   font-size: 24px;
   font-weight: 600;
+  font-family: "Poppins", sans-serif;
 }
 
 .add-product-header p {
   margin: 0;
   opacity: 0.9;
   font-size: 15px;
+  font-family: "Poppins", sans-serif;
 }
 
-/* 📝 Form Layout */
+/* Form Layout */
 .add-product-form {
   padding: 30px;
 }
@@ -99,6 +108,30 @@ label {
   font-weight: 500;
   color: #333;
   font-size: 15px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Improve checkbox alignment */
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+  font-size: 15px;
+  font-family: "Poppins", sans-serif;
+}
+
+.form-group label input[type="checkbox"] {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+/* Fix for text inputs to maintain the same layout */
+.form-group label.text-label {
+  display: block;
 }
 
 .form-control {
@@ -108,6 +141,7 @@ label {
   border-radius: 6px;
   font-size: 15px;
   transition: border-color 0.3s, box-shadow 0.3s;
+  font-family: "Poppins", sans-serif;
 }
 
 .form-control:focus {
@@ -121,16 +155,56 @@ textarea.form-control {
   min-height: 100px;
 }
 
-/* 🖼️ Preview Image */
+/* File input styling */
+.file-input-container {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.file-input {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.file-input-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 15px;
+  background-color: #f3f4f6;
+  border: 1px dashed #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #4b5563;
+}
+
+.file-input-label:hover {
+  background-color: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+/* Preview Image */
+.image-preview-container {
+  margin-top: 15px;
+  text-align: center;
+}
+
 .image-preview {
-  margin-top: 10px;
-  height: 100px;
+  max-width: 100%;
+  max-height: 200px;
   border-radius: 6px;
   object-fit: cover;
   border: 1px solid #ccc;
 }
 
-/* ✅ Submit Button */
+/* Submit Button */
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -149,10 +223,19 @@ textarea.form-control {
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Poppins", sans-serif;
 }
 
 .btn-submit:hover {
   background-color: #d97706;
+}
+
+.btn-submit:disabled {
+  background-color: #fbbf24;
+  cursor: not-allowed;
 }
 
 .btn-cancel {
@@ -164,10 +247,24 @@ textarea.form-control {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Poppins", sans-serif;
 }
 
 .btn-cancel:hover {
   background-color: #e5e7eb;
+}
+
+/* Section headers */
+h4 {
+  margin: 25px 0 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
 }
 
 /* Category Flags Section */
@@ -185,6 +282,16 @@ textarea.form-control {
   margin-bottom: 15px;
   font-size: 18px;
   color: #333;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.category-flags-section p {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #666;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
 }
 
 .category-flags-grid {
@@ -193,35 +300,55 @@ textarea.form-control {
   gap: 15px;
 }
 
+/* Category flag item improvements */
 .category-flag-item {
   display: flex;
-  align-items: center;
-  gap: 8px;
   padding: 10px;
   border: 1px solid #eee;
   border-radius: 6px;
   background-color: white;
+  transition: all 0.2s;
+}
+
+.category-flag-item:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2);
 }
 
 .category-flag-item label {
   margin-bottom: 0;
   cursor: pointer;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: flex-start;
   width: 100%;
+  gap: 10px;
 }
 
 .category-flag-item input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.category-flag-item .flag-description {
+.flag-content {
+  flex: 1;
+}
+
+.flag-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: #333;
+}
+
+.flag-description {
   font-size: 12px;
   color: #666;
   margin-top: 4px;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Message Styles */
@@ -230,6 +357,7 @@ textarea.form-control {
   margin-bottom: 20px;
   border-radius: 6px;
   font-weight: 500;
+  font-family: "Poppins", sans-serif;
 }
 
 .message.success {
@@ -244,7 +372,7 @@ textarea.form-control {
   border: 1px solid #fecaca;
 }
 
-/* 📱 Responsive Fixes */
+/* Responsive Fixes */
 @media (max-width: 768px) {
   .top-bar {
     flex-direction: column;
@@ -274,6 +402,7 @@ textarea.form-control {
   .btn-signout {
     width: 100%;
     text-align: center;
+    justify-content: center;
   }
 
   .category-flags-grid {

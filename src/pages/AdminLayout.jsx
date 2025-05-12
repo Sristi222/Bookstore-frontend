@@ -1,80 +1,70 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
+"use client"
+
+import { Link, Outlet, useNavigate } from "react-router-dom"
+import { PlusCircle, Package, ImageIcon, FileText, LogOut, ShoppingBag } from "lucide-react"
+import "./AdminLayout.css"
 
 const AdminLayout = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleSignOut = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("isAdmin");
-    navigate("/login"); // Redirects to login page
-  };
+    localStorage.removeItem("token")
+    localStorage.removeItem("isAdmin")
+    navigate("/login") // Redirects to login page
+  }
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
+    <div className="staff-dashboard">
       {/* Sidebar */}
-      <div
-        style={{
-          width: "220px",
-          background: "#333",
-          color: "#fff",
-          padding: "20px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
-      >
-        <div>
-          <h2 style={{ marginBottom: "20px" }}>Admin Panel</h2>
-          <nav>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              <li style={{ marginBottom: "10px" }}>
-                <Link to="/admin/add-product" style={{ color: "#fff", textDecoration: "none" }}>
-                  ➕ Add Product
-                </Link>
-              </li>
-              <li style={{ marginBottom: "10px" }}>
-                <Link to="/admin/view-products" style={{ color: "#fff", textDecoration: "none" }}>
-                  📦 View Products
-                </Link>
-              </li>
-              <li style={{ marginBottom: "10px" }}>
-                <Link to="/admin/add-banner" style={{ color: "#fff", textDecoration: "none" }}>
-                  🖼️ Add Banner
-                </Link>
-              </li>
-              <li style={{ marginBottom: "10px" }}>
-                <Link to="/admin/view-orders" style={{ color: "#fff", textDecoration: "none" }}>
-                  🧾 View Orders
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
+      <div className="sidebar">
+        <h2>
+          Admin Panel
+        </h2>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/admin" className="sidebar-link">
+                 Admin Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/add-product" className="sidebar-link">
+                <PlusCircle className="icon" /> Add Product
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/view-products" className="sidebar-link">
+                <Package className="icon" /> View Products
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/add-banner" className="sidebar-link">
+                <ImageIcon className="icon" /> Manage Banners
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/view-orders" className="sidebar-link">
+                <FileText className="icon" /> View Orders
+              </Link>
+            </li>
+          </ul>
+        </nav>
 
-        <button
-          onClick={handleSignOut}
-          style={{
-            padding: "10px 24px",
-            borderRadius: "8px",
-            backgroundColor: "#ef4444",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
-            fontWeight: 600,
-            fontSize: "15px",
-            marginTop: "20px",
-          }}
-        >
-          🚪 Sign Out
-        </button>
+        <div className="sidebar-footer">
+          <button onClick={handleSignOut} className="logout-btn">
+            <LogOut className="icon" /> Sign Out
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
-      <div style={{ flex: 1, padding: "20px", backgroundColor: "#f9f9f9" }}>
-        <Outlet /> {/* Nested routes render here */}
-      </div>
+      <main>
+        <div className="content-container">
+          <Outlet /> {/* Nested routes render here */}
+        </div>
+      </main>
     </div>
-  );
-};
+  )
+}
 
-export default AdminLayout;
+export default AdminLayout

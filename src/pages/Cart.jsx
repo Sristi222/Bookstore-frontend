@@ -1,49 +1,50 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Menu, X, ShoppingCart, Settings } from "lucide-react";
-import "./Home.css";
-import "./Cart.css";
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import { ShoppingCart, Trash2 } from "lucide-react"
+
+import "./Home.css"
+import "./Cart.css"
 
 const Cart = () => {
-  const [cart, setCart] = useState([]);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [cart, setCart] = useState([])
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
-  const isLoggedIn = () => !!localStorage.getItem("token");
-  const API_URL = "https://localhost:7085/api";
-  const userId = localStorage.getItem("userId") || "guest";
-  const token = localStorage.getItem("token");
+  const isLoggedIn = () => !!localStorage.getItem("token")
+  const API_URL = "https://localhost:7085/api"
+  const userId = localStorage.getItem("userId") || "guest"
+  const token = localStorage.getItem("token")
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-  };
+    localStorage.removeItem("token")
+    localStorage.removeItem("userId")
+  }
 
   const fetchCart = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       const response = await axios.get(`${API_URL}/Cart?userId=${userId}`, {
         headers: { Authorization: `Bearer ${token || ""}` },
-      });
-      setCart(response.data.items || []);
-      setLoading(false);
+      })
+      setCart(response.data.items || [])
+      setLoading(false)
     } catch (err) {
-      console.error("Error fetching cart:", err.response?.data || err.message);
-      setCart([]);
-      setLoading(false);
+      console.error("Error fetching cart:", err.response?.data || err.message)
+      setCart([])
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchCart();
-  }, []);
+    fetchCart()
+  }, [])
 
   const updateQuantity = async (itemId, newQuantity) => {
-    if (newQuantity < 1) return;
+    if (newQuantity < 1) return
     try {
       await axios.put(
         `${API_URL}/Cart/${itemId}?userId=${userId}`,
@@ -53,69 +54,89 @@ const Cart = () => {
             Authorization: `Bearer ${token || ""}`,
             "Content-Type": "application/json",
           },
-        }
-      );
-      fetchCart();
+        },
+      )
+      fetchCart()
     } catch (err) {
-      console.error("Error updating quantity:", err);
+      console.error("Error updating quantity:", err)
     }
-  };
+  }
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.subtotal, 0);
-  };
+    return cart.reduce((total, item) => total + item.subtotal, 0)
+  }
 
   const proceedToOrderBill = () => {
-    localStorage.setItem("cartItems", JSON.stringify(cart));
-    navigate("/order-bill"); // 🟢 new page for Order Summary
-  };
+    localStorage.setItem("cartItems", JSON.stringify(cart))
+    navigate("/order-bill") // 🟢 new page for Order Summary
+  }
 
-  if (loading) return <div className="loading">Loading your cart...</div>;
+  if (loading) return <div className="loading">Loading your cart...</div>
+
+  const removeFromCart = async (itemId) => {
+    try {
+      await axios.delete(`${API_URL}/Cart/${itemId}?userId=${userId}`, {
+        headers: { Authorization: `Bearer ${token || ""}` },
+      })
+      fetchCart()
+    } catch (err) {
+      console.error("Error removing item:", err)
+      alert("Failed to remove item.")
+    }
+  }
 
   return (
     <div className="app-container">
+      {/* Navbar */}
       <header className="navbar">
         <div className="navbar-container">
-          <a href="/" className="logo">BOOK SHOP</a>
+          <a href="/" className="logo">
+            BOOK SHOP
+          </a>
+          <button className="mobile-menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? "✕" : "☰"}
+          </button>
           <nav className={`nav-links ${mobileMenuOpen ? "active" : ""}`}>
-            <div className="nav-center">
-              <a href="/" className="nav-link">Home</a>
-              <a href="/shop" className="nav-link">Shop</a>
-              <a href="/cart" className="nav-link">Cart</a>
-              <a href="/bookmarks" className="nav-link">Bookmarks</a>
-            </div>
-            <div className="nav-right">
+            <a href="/" className="nav-link">
+              Home
+            </a>
+
+            <a href="/my-reviews" className="nav-link">
+              My Reviews
+            </a>
+
+            <a href="/bookmarks" className="nav-link">
+              Bookmarks
+            </a>
+            <a href="/orders" className="nav-link">
+              My Orders
+            </a>
+            <a href="/cart" className="cart-icon">
+              <ShoppingCart size={20} style={{ color: "#b8860b" }} />
+            </a>
+            <div className="auth-buttons">
               {isLoggedIn() ? (
                 <button
                   className="btn logout-btn"
-                  onClick={() => { logout(); window.location.reload(); }}
+                  onClick={() => {
+                    logout()
+                    window.location.reload()
+                  }}
                 >
                   Logout
                 </button>
               ) : (
                 <>
-                  <a href="/login" className="btn login-btn">Login</a>
-                  <a href="/register" className="btn signup-btn">Sign Up</a>
+                  <a href="/login" className="btn login-btn">
+                    Login
+                  </a>
+                  <a href="/register" className="btn register-btn">
+                    Register
+                  </a>
                 </>
               )}
-              <a href="/cart" className="cart-icon">
-                <ShoppingCart size={20} style={{ color: "#b8860b" }} />
-              </a>
-              <button className="settings-icon">
-                <Settings size={20} style={{ color: "#b8860b" }} />
-              </button>
             </div>
           </nav>
-          <button
-            className="mobile-menu-toggle"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? (
-              <X style={{ color: "#b8860b" }} />
-            ) : (
-              <Menu style={{ color: "#b8860b" }} />
-            )}
-          </button>
         </div>
       </header>
 
@@ -128,10 +149,7 @@ const Cart = () => {
               <div className="empty-cart">
                 <h3>Your cart is empty</h3>
                 <p>Looks like you haven't added any books to your cart yet.</p>
-                <button
-                  className="continue-shopping-btn"
-                  onClick={() => navigate("/")}
-                >
+                <button className="continue-shopping-btn" onClick={() => navigate("/")}>
                   Continue Shopping
                 </button>
               </div>
@@ -145,41 +163,48 @@ const Cart = () => {
                           src={
                             item.product.image?.startsWith("/uploads")
                               ? `https://localhost:7085${item.product.image}`
-                              : item.product.image || "/placeholder.svg"
+                              : item.product.image || "https://via.placeholder.com/150"
                           }
                           alt={item.product.name}
+                          onError={(e) => {
+                            e.target.onerror = null
+                            e.target.src = "https://via.placeholder.com/150"
+                          }}
                         />
                       </div>
+
                       <div className="item-name">
                         <h3>Book Name</h3>
                         <p>{item.product.name}</p>
                       </div>
+
                       <div className="item-description">
                         <h3>{item.product.description}</h3>
                       </div>
+
                       <div className="item-price">
                         <h3>Rs {item.product.price}</h3>
                       </div>
+
                       <div className="item-quantity">
                         <h3>Copies</h3>
                         <div className="quantity-control">
                           <button
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity - 1)
-                            }
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             disabled={item.quantity <= 1}
                           >
                             -
                           </button>
                           <span>{item.quantity}</span>
-                          <button
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity + 1)
-                            }
-                          >
-                            +
-                          </button>
+                          <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
                         </div>
+                      </div>
+
+                      <div className="item-remove">
+                        <button className="remove-btn" onClick={() => removeFromCart(item.id)}>
+                          <Trash2 size={16} />
+                          Remove
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -190,13 +215,9 @@ const Cart = () => {
                     <h3>Total Price: Rs. {calculateTotal().toFixed(2)}</h3>
                   </div>
                   <div className="cart-actions">
-                    <button
-                      className="checkout-btn"
-                      onClick={proceedToOrderBill}
-                    >
+                    <button className="checkout-btn" onClick={proceedToOrderBill}>
                       Proceed to Checkout
                     </button>
-                    <button className="details-btn">Add Personal Details</button>
                   </div>
                 </div>
               </>
@@ -215,19 +236,35 @@ const Cart = () => {
             <div className="footer-column">
               <h4>Shop</h4>
               <ul>
-                <li><a href="#">New Arrivals</a></li>
-                <li><a href="#">Best Sellers</a></li>
-                <li><a href="#">Sale</a></li>
-                <li><a href="#">Collections</a></li>
+                <li>
+                  <a href="#">New Arrivals</a>
+                </li>
+                <li>
+                  <a href="#">Best Sellers</a>
+                </li>
+                <li>
+                  <a href="#">Sale</a>
+                </li>
+                <li>
+                  <a href="#">Collections</a>
+                </li>
               </ul>
             </div>
             <div className="footer-column">
               <h4>Help</h4>
               <ul>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">FAQs</a></li>
-                <li><a href="#">Shipping</a></li>
-                <li><a href="#">Returns</a></li>
+                <li>
+                  <a href="#">Contact Us</a>
+                </li>
+                <li>
+                  <a href="#">FAQs</a>
+                </li>
+                <li>
+                  <a href="#">Shipping</a>
+                </li>
+                <li>
+                  <a href="#">Returns</a>
+                </li>
               </ul>
             </div>
           </div>
@@ -237,7 +274,7 @@ const Cart = () => {
         </div>
       </footer>
     </div>
-  );
-};
+  )
+}
 
-export default Cart;
+export default Cart

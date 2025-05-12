@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
+import { PlusCircle, LogOut, Save, X, Upload, Award, TrendingUp, Star, Sparkles, Clock, Tag } from "lucide-react"
 import "./AddProduct.css"
 
 const AddProduct = () => {
@@ -64,35 +65,35 @@ const AddProduct = () => {
   const validateForm = () => {
     // Required fields
     if (!form.name || form.name.trim() === "") {
-      setMessage({ text: "❌ Product name is required", type: "error" })
+      setMessage({ text: "Product name is required", type: "error" })
       return false
     }
 
     if (!form.price || isNaN(Number.parseFloat(form.price)) || Number.parseFloat(form.price) < 0) {
-      setMessage({ text: "❌ Please enter a valid price", type: "error" })
+      setMessage({ text: "Please enter a valid price", type: "error" })
       return false
     }
 
     // Validate discount percent if on sale
     if (form.onSale) {
       if (!form.discountPercent || isNaN(Number.parseFloat(form.discountPercent))) {
-        setMessage({ text: "❌ Please enter a valid discount percentage", type: "error" })
+        setMessage({ text: "Please enter a valid discount percentage", type: "error" })
         return false
       }
 
       const discountPercent = Number.parseFloat(form.discountPercent)
       if (discountPercent < 0 || discountPercent > 100) {
-        setMessage({ text: "❌ Discount percentage must be between 0 and 100", type: "error" })
+        setMessage({ text: "Discount percentage must be between 0 and 100", type: "error" })
         return false
       }
 
       if (!form.discountStartDate) {
-        setMessage({ text: "❌ Discount start date is required for sale items", type: "error" })
+        setMessage({ text: "Discount start date is required for sale items", type: "error" })
         return false
       }
 
       if (!form.discountEndDate) {
-        setMessage({ text: "❌ Discount end date is required for sale items", type: "error" })
+        setMessage({ text: "Discount end date is required for sale items", type: "error" })
         return false
       }
 
@@ -100,20 +101,20 @@ const AddProduct = () => {
       const startDate = new Date(form.discountStartDate)
       const endDate = new Date(form.discountEndDate)
       if (endDate < startDate) {
-        setMessage({ text: "❌ Discount end date must be after start date", type: "error" })
+        setMessage({ text: "Discount end date must be after start date", type: "error" })
         return false
       }
     }
 
     // Validate stock quantity
     if (form.stockQuantity && (isNaN(Number.parseInt(form.stockQuantity)) || Number.parseInt(form.stockQuantity) < 0)) {
-      setMessage({ text: "❌ Stock quantity must be a non-negative number", type: "error" })
+      setMessage({ text: "Stock quantity must be a non-negative number", type: "error" })
       return false
     }
 
     // Validate image
     if (!imageFile) {
-      setMessage({ text: "❌ Please upload a product image", type: "error" })
+      setMessage({ text: "Please upload a product image", type: "error" })
       return false
     }
 
@@ -159,7 +160,7 @@ const AddProduct = () => {
         headers: { "Content-Type": "multipart/form-data" },
       })
 
-      setMessage({ text: "✅ Product added successfully!", type: "success" })
+      setMessage({ text: "Product added successfully!", type: "success" })
       setForm({
         name: "",
         author: "",
@@ -200,7 +201,7 @@ const AddProduct = () => {
       }
 
       setMessage({
-        text: `❌ ${errorMessage}`,
+        text: errorMessage,
         type: "error",
       })
     } finally {
@@ -208,37 +209,43 @@ const AddProduct = () => {
     }
   }
 
-  // Category flags configuration
+  // Category flags configuration with icons
   const categoryFlags = [
     {
       name: "isTrending",
       label: "Trending",
       description: "Mark as a trending product",
+      icon: <TrendingUp size={18} />,
     },
     {
       name: "isBestseller",
       label: "Bestseller",
       description: "Mark as a bestselling product",
+      icon: <Star size={18} />,
     },
     {
       name: "hasAward",
       label: "Award Winner",
       description: "Mark as an award-winning product",
+      icon: <Award size={18} />,
     },
     {
       name: "isNewRelease",
       label: "New Release",
       description: "Mark as a newly released product",
+      icon: <Sparkles size={18} />,
     },
     {
       name: "isComingSoon",
       label: "Coming Soon",
       description: "Mark as an upcoming product",
+      icon: <Clock size={18} />,
     },
     {
       name: "isOnDeal",
       label: "On Deal",
       description: "Mark as a special deal product",
+      icon: <Tag size={18} />,
     },
   ]
 
@@ -246,11 +253,17 @@ const AddProduct = () => {
     <div className="add-product-container">
       <div className="top-bar">
         <button className="btn-toggle-form" onClick={() => setShowForm(!showForm)}>
-          {showForm ? "Hide Form" : "➕ Add Product"}
+          {showForm ? (
+            <>
+              <X size={18} /> Hide Form
+            </>
+          ) : (
+            <>
+              <PlusCircle size={18} /> Add Product
+            </>
+          )}
         </button>
-        <button className="btn-signout" onClick={handleSignOut}>
-          Sign Out
-        </button>
+        
       </div>
 
       {showForm && (
@@ -377,8 +390,11 @@ const AddProduct = () => {
                   <div className="category-flag-item" key={flag.name}>
                     <label>
                       <input type="checkbox" name={flag.name} checked={form[flag.name]} onChange={handleChange} />
-                      <div>
-                        <div>{flag.label}</div>
+                      <div className="flag-content">
+                        <div className="flag-title">
+                          {flag.icon}
+                          <span>{flag.label}</span>
+                        </div>
                         <div className="flag-description">{flag.description}</div>
                       </div>
                     </label>
@@ -390,22 +406,33 @@ const AddProduct = () => {
             {/* Product Image */}
             <div className="form-group">
               <label>Product Image *</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="form-control"
-                required={!imageFile}
-              />
-              {preview && <img src={preview || "/placeholder.svg"} alt="Preview" className="image-preview" />}
+              <div className="file-input-container">
+                <input
+                  type="file"
+                  id="image-upload"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="form-control file-input"
+                  required={!imageFile}
+                />
+                <label htmlFor="image-upload" className="file-input-label">
+                  <Upload size={18} />
+                  <span>{imageFile ? "Change Image" : "Choose Image"}</span>
+                </label>
+              </div>
+              {preview && (
+                <div className="image-preview-container">
+                  <img src={preview || "/placeholder.svg"} alt="Preview" className="image-preview" />
+                </div>
+              )}
             </div>
 
             <div className="form-actions">
               <button type="button" onClick={() => setShowForm(false)} className="btn-cancel">
-                Cancel
+                <X size={18} /> Cancel
               </button>
               <button type="submit" className="btn-submit" disabled={isSubmitting}>
-                {isSubmitting ? "Adding..." : "Add Product"}
+                <Save size={18} /> {isSubmitting ? "Adding..." : "Add Product"}
               </button>
             </div>
           </form>
