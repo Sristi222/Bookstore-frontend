@@ -1,0 +1,219 @@
+checkout.css
+
+/* Enhanced Checkout Page Styles */
+.checkout-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  font-family: "Times New Roman", serif;
+  border-top: 4px solid #b8860b;
+}
+
+.checkout-container h1 {
+  font-size: 32px;
+  color: #b8860b;
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.checkout-container h1::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: #b8860b;
+}
+
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-form label {
+  margin-top: 20px;
+  font-weight: 600;
+  color: #333;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.checkout-form input,
+.checkout-form textarea {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.checkout-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.checkout-form input:focus,
+.checkout-form textarea:focus {
+  outline: none;
+  border-color: #b8860b;
+  box-shadow: 0 0 0 2px rgba(184, 134, 11, 0.2);
+}
+
+.place-order-btn {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #b8860b;
+  background-image: linear-gradient(to bottom, #b8860b, #a67c00);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Times New Roman", serif;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.place-order-btn:hover {
+  background-image: linear-gradient(to bottom, #a67c00, #8f6b00);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
+}
+
+.place-order-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(184, 134, 11, 0.3);
+}
+
+.place-order-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+.place-order-btn:hover::after {
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  20% {
+    transform: scale(25, 25);
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(40, 40);
+  }
+}
+
+/* Order Summary Section (optional) */
+.order-summary {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  border-left: 4px solid #b8860b;
+}
+
+.order-summary h2 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed #ddd;
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+  font-weight: bold;
+  color: #b8860b;
+  padding-top: 15px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .checkout-container {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .checkout-container h1 {
+    font-size: 28px;
+  }
+
+  .checkout-form input,
+  .checkout-form textarea {
+    font-size: 15px;
+  }
+
+  .place-order-btn {
+    font-size: 16px;
+    padding: 12px;
+  }
+}
+
+/* Form validation styles */
+.checkout-form input:invalid,
+.checkout-form textarea:invalid {
+  border-color: #e74c3c;
+}
+
+.checkout-form input:focus:invalid,
+.checkout-form textarea:focus:invalid {
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+}
+
+/* Success message */
+.success-message {
+  text-align: center;
+  padding: 20px;
+  background-color: #d4edda;
+  color: #155724;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.success-message.show {
+  display: block;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

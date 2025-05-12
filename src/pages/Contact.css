@@ -1,0 +1,404 @@
+/* Base Styles - Same as Home.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f9f9;
+  }
+  
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  ul {
+    list-style: none;
+  }
+  
+  /* Navbar Styles - Same as Home.css */
+  .navbar {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #15803d; /* Green-700 */
+  }
+  
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .nav-link {
+    font-size: 15px;
+    color: #166534; /* Green-800 */
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-link:hover,
+  .nav-link.active {
+    color: #15803d; /* Green-700 */
+  }
+  
+  .nav-link.active {
+    font-weight: 600;
+  }
+  
+  .auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 14px;
+  }
+  
+  .login-btn {
+    background-color: transparent;
+    border: 1px solid #15803d; /* Green-700 */
+    color: #15803d; /* Green-700 */
+  }
+  
+  .login-btn:hover {
+    background-color: #f0fdf4; /* Green-50 */
+  }
+  
+  .register-btn {
+    background-color: #15803d; /* Green-700 */
+    color: white;
+  }
+  
+  .register-btn:hover {
+    background-color: #166534; /* Green-800 */
+  }
+  
+  .logout-btn {
+    background-color: transparent;
+    border: 1px solid #15803d; /* Green-700 */
+    color: #15803d; /* Green-700 */
+  }
+  
+  .logout-btn:hover {
+    background-color: #f0fdf4; /* Green-50 */
+  }
+  
+  .cart-icon {
+    font-size: 20px;
+    margin-left: 10px;
+  }
+  
+  .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #15803d; /* Green-700 */
+  }
+  
+  /* Contact Page Specific Styles */
+  .contact-us {
+    padding: 60px 20px;
+    background-color: #f9f9f9;
+    flex: 1;
+  }
+  
+  .contact-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .contact-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #166534; /* Green-800 */
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .contact-subtitle {
+    text-align: center;
+    color: #6b7280; /* Gray-500 */
+    margin-bottom: 40px;
+    font-size: 16px;
+  }
+  
+  .contact-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .contact-info {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .info-group {
+    margin-bottom: 30px;
+  }
+  
+  .info-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #166534; /* Green-800 */
+    margin-bottom: 20px;
+  }
+  
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 15px;
+    color: #4b5563; /* Gray-600 */
+  }
+  
+  .info-item svg {
+    color: #15803d; /* Green-700 */
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  
+  .info-item p {
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  .email-link {
+    color: #15803d; /* Green-700 */
+    transition: color 0.3s;
+  }
+  
+  .email-link:hover {
+    color: #166534; /* Green-800 */
+    text-decoration: underline;
+  }
+  
+  .whatsapp-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #15803d; /* Green-700 */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: auto;
+  }
+  
+  .whatsapp-btn:hover {
+    background-color: #166534; /* Green-800 */
+  }
+  
+  .map-container {
+    height: 100%;
+    min-height: 400px;
+  }
+  
+  /* Footer Styles - Same as Home.css */
+  .footer {
+    background-color: #f0fdf4; /* Green-50 */
+    border-top: 1px solid #dcfce7; /* Green-100 */
+    padding: 60px 0 20px;
+  }
+  
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .footer-columns {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  
+  .footer-column h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #14532d; /* Green-900 */
+    margin-bottom: 16px;
+  }
+  
+  .footer-column h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #166534; /* Green-800 */
+    margin-bottom: 16px;
+  }
+  
+  .footer-column p {
+    font-size: 14px;
+    color: #15803d; /* Green-700 */
+    margin-bottom: 16px;
+  }
+  
+  .footer-column ul {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .footer-column ul li a {
+    font-size: 14px;
+    color: #15803d; /* Green-700 */
+    transition: color 0.3s ease;
+  }
+  
+  .footer-column ul li a:hover {
+    color: #166534; /* Green-800 */
+  }
+  
+  .newsletter-form {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .newsletter-form input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #dcfce7; /* Green-100 */
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #ffffff;
+  }
+  
+  .newsletter-form input:focus {
+    outline: none;
+    border-color: #15803d; /* Green-700 */
+  }
+  
+  .subscribe-btn {
+    background-color: #15803d; /* Green-700 */
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .subscribe-btn:hover {
+    background-color: #166534; /* Green-800 */
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #dcfce7; /* Green-100 */
+    font-size: 14px;
+    color: #15803d; /* Green-700 */
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 992px) {
+    .footer-columns {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  
+    .contact-content {
+      grid-template-columns: 1fr;
+    }
+  
+    .map-container {
+      height: 350px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .mobile-menu-toggle {
+      display: block;
+    }
+  
+    .nav-links {
+      position: absolute;
+      top: 70px;
+      left: 0;
+      right: 0;
+      background-color: white;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+  
+    .nav-links.active {
+      display: flex;
+    }
+  
+    .auth-buttons {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7eb; /* Gray-200 */
+    }
+  
+    .contact-info {
+      padding: 30px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .footer-columns {
+      grid-template-columns: 1fr;
+    }
+  
+    .contact-title {
+      font-size: 28px;
+    }
+  
+    .contact-info {
+      padding: 20px;
+    }
+  }
+  
