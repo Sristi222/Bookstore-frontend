@@ -1,94 +1,102 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import "./Login.css"; // Import the external CSS
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const loginUser = async () => {
-    setLoading(true);
     try {
       const res = await axios.post("https://localhost:7085/api/Auth/login", {
         email,
         password,
       });
 
-      const token = res.data.token;
-      const userId = res.data.userId; // ✅ still here
+      localStorage.setItem("token", res.data.token);
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", userId);
-
-      const decoded = jwtDecode(token);
-      console.log("Decoded token:", decoded);
-
-      const userRoles =
-        decoded.role ||
-        decoded[
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-        ];
-
-      const isAdmin =
-        (Array.isArray(userRoles) && userRoles.includes("Admin")) ||
-        userRoles === "Admin";
-
-      const isStaff =
-        (Array.isArray(userRoles) && userRoles.includes("Staff")) ||
-        userRoles === "Staff";
-
-      localStorage.setItem("isAdmin", isAdmin ? "true" : "false");
-      localStorage.setItem("isStaff", isStaff ? "true" : "false");
-
-      if (isAdmin) {
-        navigate("/admin");
-      } else if (isStaff) {
-        navigate("/staff");
+      if (email === "admin@gmail.com" && password === "admin123") {
+        localStorage.setItem("isAdmin", "true");
+        navigate("/add-product");
       } else {
+        localStorage.setItem("isAdmin", "false");
         navigate("/");
       }
     } catch (err) {
+      alert("Invalid credentials");
       console.error(err);
-      alert(
-        err.response?.data?.message || "Login failed. Please check credentials."
-      );
-    } finally {
-      setLoading(false);
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") loginUser();
+  const goToSignUp = () => {
+    navigate("/register");
   };
 
   return (
-    <div className="container mt-4">
-      <h3>Login</h3>
-      <input
-        className="form-control mb-2"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <input
-        className="form-control mb-2"
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <button
-        className="btn btn-primary"
-        onClick={loginUser}
-        disabled={loading}
-      >
-        {loading ? "Logging in..." : "Login"}
-      </button>
+    <div className="login-container">
+      <div className="login-box">
+        <div className="login-form-section">
+          <h2 className="login-title">WELCOME MEMBER</h2>
+          <p className="login-subtitle">Welcome back! Please enter your details.</p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              loginUser();
+            }}
+          >
+            <div className="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                required
+              />
+            </div>
+
+            <div className="form-options">
+              <label>
+                <input type="checkbox" /> Remember me
+              </label>
+              <a href="#forgot" className="forgot-link">Forgot password?</a>
+            </div>
+
+            <button type="submit" className="login-button">Sign in</button>
+          </form>
+
+          <div className="signup-link">
+            <p>
+              Don’t have an account?{" "}
+              <a href="#" onClick={goToSignUp} style={{ textDecoration: 'none', color: "#b8860b" }}>
+  Sign up
+</a>
+
+
+            </p>
+          </div>
+        </div>
+
+        <div className="login-image-section">
+          <img
+            src="https://img.freepik.com/free-vector/hand-drawn-flat-design-stack-books-illustration_23-2149341898.jpg?semt=ais_hybrid&w=740"
+            alt="Books"
+          />
+        </div>
+      </div>
     </div>
   );
 };
