@@ -8,6 +8,9 @@ import "./Home.css";
 import "./Cart.css";
 
 const Cart = () => {
+
+
+  // state management
   const [cart, setCart] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -23,6 +26,8 @@ const Cart = () => {
     localStorage.removeItem("userId");
   };
 
+
+  // fetch data
   const fetchCart = async () => {
     try {
       setLoading(true);
@@ -37,6 +42,8 @@ const Cart = () => {
       setLoading(false);
     }
   };
+
+  
 
   useEffect(() => {
     fetchCart();
