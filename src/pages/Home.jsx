@@ -176,6 +176,10 @@ const Home = () => {
           <nav className={`nav-links ${mobileMenuOpen ? "active" : ""}`}>
             <a href="/" className="nav-link">Home</a>
             <a href="/about" className="nav-link">About</a>
+<<<<<<< HEAD
+=======
+            <a href="/my-reviews" className="nav-link">My Reviews</a>
+>>>>>>> cc9edb02afd520c6b5fa0ce0cd5d9527767a71c4
             <a href="/ContactUs" className="nav-link">Contact</a>
             {isLoggedIn() && <a href="/bookmarks" className="nav-link">Bookmarks</a>}
             {isLoggedIn() && <a href="/orders" className="nav-link">My Orders</a>}

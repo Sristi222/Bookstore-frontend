@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Update the overall color scheme and styling */
 .staff-dashboard {
   display: flex;
@@ -10,16 +11,33 @@
   width: 250px;
   background: #ffffff;
   color: #333;
+=======
+.staff-dashboard {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f6f8;
+}
+
+.sidebar {
+  width: 220px;
+  background: #2f4050;
+  color: white;
+>>>>>>> cc9edb02afd520c6b5fa0ce0cd5d9527767a71c4
   padding: 20px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   border-right: 1px solid #e5e7eb;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+=======
+>>>>>>> cc9edb02afd520c6b5fa0ce0cd5d9527767a71c4
 }
 
 .sidebar h2 {
   font-size: 20px;
+<<<<<<< HEAD
   margin-bottom: 25px;
   font-weight: 600;
   color: #111827;
@@ -34,12 +52,16 @@
   height: 24px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z'/%3E%3Cpath d='M3 6h18'/%3E%3Cpath d='M16 10a4 4 0 0 1-8 0'/%3E%3C/svg%3E");
   margin-right: 10px;
+=======
+  margin-bottom: 20px;
+>>>>>>> cc9edb02afd520c6b5fa0ce0cd5d9527767a71c4
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
   margin: 0;
+<<<<<<< HEAD
   flex-grow: 1;
 }
 
@@ -102,10 +124,28 @@
 
 .logout-btn .icon {
   margin-right: 12px;
+=======
+}
+
+.sidebar li {
+  margin-bottom: 15px;
+}
+
+.sidebar a {
+  color: #d1d5db;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.sidebar a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+>>>>>>> cc9edb02afd520c6b5fa0ce0cd5d9527767a71c4
 }
 
 main {
   flex: 1;
+<<<<<<< HEAD
   display: flex;
   flex-direction: column;
   background: #f9fafb;
@@ -713,6 +753,16 @@ table tr:hover td {
     align-items: flex-start;
     gap: 12px;
   }
+=======
+  padding: 30px;
+  background: #ffffff;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+main h1 {
+  font-size: 24px;
+  color: #333;
+>>>>>>> cc9edb02afd520c6b5fa0ce0cd5d9527767a71c4
 }
 
 .process-claim-form {
