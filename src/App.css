@@ -1,0 +1,88 @@
+/* App.css - Sage Green + Orange Theme */
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4fdf7; /* soft sage background */
+  color: #2f4f4f;
+  margin: 0;
+}
+
+.container {
+  padding-top: 20px;
+}
+
+h2 {
+  font-weight: bold;
+}
+
+.card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.card-img-top {
+  height: 220px;
+  object-fit: cover;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.card-title {
+  color: #4caf50; /* Sage green */
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.card-text {
+  color: #555;
+}
+
+.btn-success {
+  background-color: #8cbf75;
+  border-color: #8cbf75;
+}
+
+.btn-success:hover {
+  background-color: #7ca867;
+  border-color: #7ca867;
+}
+
+.btn-primary {
+  background-color: #ff9800;
+  border-color: #ff9800;
+}
+
+.btn-primary:hover {
+  background-color: #fb8c00;
+  border-color: #fb8c00;
+}
+
+.btn-outline-primary {
+  border-color: #ff9800;
+  color: #ff9800;
+}
+
+.btn-outline-primary:hover {
+  background-color: #ff9800;
+  color: #fff;
+}
+
+.btn-outline-danger {
+  border-color: #d32f2f;
+  color: #d32f2f;
+}
+
+.btn-outline-danger:hover {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+.text-warning {
+  color: #ff9800 !important;
+}
