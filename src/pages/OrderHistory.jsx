@@ -11,6 +11,11 @@ const OrderHistory = () => {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
+  const [orderToCancel, setOrderToCancel] = useState(null)
+  const [notification, setNotification] = useState(null)
+  const [processingCancel, setProcessingCancel] = useState(false)
+
   const userId = localStorage.getItem("userId")
   const token = localStorage.getItem("token")
   const API_URL = "https://localhost:7085/api"
@@ -37,21 +42,45 @@ const OrderHistory = () => {
     }
   }
 
-  const cancelOrder = async (orderId) => {
+  const openCancelConfirmModal = (orderId) => {
+    setOrderToCancel(orderId)
+    setIsConfirmModalOpen(true)
+  }
+
+  const closeCancelConfirmModal = () => {
+    setIsConfirmModalOpen(false)
+    setOrderToCancel(null)
+  }
+
+  const confirmCancelOrder = async () => {
+    if (!orderToCancel) return
+
+    setProcessingCancel(true)
     try {
-      await axios.put(`${API_URL}/Orders/${orderId}/cancel?userId=${userId}`, null, {
+      await axios.put(`${API_URL}/Orders/${orderToCancel}/cancel?userId=${userId}`, null, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      alert("Order cancelled successfully!")
+
+      // Show success notification instead of alert
+      showNotification("Success", "Order cancelled successfully!", "success")
       fetchOrders() // refresh orders
     } catch (err) {
-      alert("Failed to cancel order: " + (err.response?.data || err.message))
+      showNotification("Error", "Failed to cancel order: " + (err.response?.data || err.message), "error")
+    } finally {
+      setProcessingCancel(false)
+      closeCancelConfirmModal()
     }
+  }
+
+  const showNotification = (title, message, type = "success") => {
+    setNotification({ title, message, type })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000) // Hide after 5 seconds
   }
 
   useEffect(() => {
     if (!isLoggedIn()) {
-      alert("Please log in to view your orders.")
       navigate("/login")
       return
     }
@@ -113,8 +142,8 @@ const OrderHistory = () => {
               My Orders
             </a>
             <a href="/cart" className="cart-icon">
-                <ShoppingCart size={20} style={{ color: "#b8860b" }} />
-              </a>
+              <ShoppingCart size={20} style={{ color: "#b8860b" }} />
+            </a>
             <div className="auth-buttons">
               {isLoggedIn() ? (
                 <button
@@ -136,7 +165,6 @@ const OrderHistory = () => {
                   </a>
                 </>
               )}
-              
             </div>
           </nav>
         </div>
@@ -202,7 +230,7 @@ const OrderHistory = () => {
                       <td className="claim-code">{order.claimCode}</td>
                       <td className="actions-cell">
                         {(order.status === "Pending" || order.status === "Processing") && (
-                          <button className="cancelBtn" onClick={() => cancelOrder(order.id)}>
+                          <button className="cancelBtn" onClick={() => openCancelConfirmModal(order.id)}>
                             Cancel
                           </button>
                         )}
@@ -272,6 +300,91 @@ const OrderHistory = () => {
           </div>
         </div>
       </footer>
+
+      {/* Confirmation Modal */}
+      {isConfirmModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-container confirmation-modal">
+            <div className="modal-header">
+              <h3>Confirm Cancellation</h3>
+              <button className="modal-close-btn" onClick={closeCancelConfirmModal}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div className="modal-content">
+              <p>Are you sure you want to cancel this order?</p>
+              <p className="modal-warning">This action cannot be undone.</p>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-danger" onClick={confirmCancelOrder} disabled={processingCancel}>
+                {processingCancel ? (
+                  <>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="loading-icon"
+                    >
+                      <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                    </svg>
+                    Processing...
+                  </>
+                ) : (
+                  "Yes, Cancel Order"
+                )}
+              </button>
+              <button className="btn btn-outline" onClick={closeCancelConfirmModal}>
+                No, Keep Order
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Notification Toast */}
+      {notification && (
+        <div className={`notification-toast ${notification.type}`}>
+          <div className="notification-header">
+            <h4>{notification.title}</h4>
+            <button className="notification-close" onClick={() => setNotification(null)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+          <p>{notification.message}</p>
+        </div>
+      )}
     </div>
   )
 }
