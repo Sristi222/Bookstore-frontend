@@ -18,7 +18,7 @@ const Cart = () => {
 
   const isLoggedIn = () => !!localStorage.getItem("token");
   const API_URL = "https://localhost:7085/api";
-  const userId = localStorage.getItem("userId") || "guest";
+  const userId = localStorage.getItem("userId") || "guests";
   const token = localStorage.getItem("token");
 
   const logout = () => {
@@ -37,13 +37,13 @@ const Cart = () => {
       setCart(response.data.items || []);
       setLoading(false);
     } catch (err) {
-      console.error("Error fetching cart:", err.response?.data || err.message);
+      console.error("Error fetching carts:", err.response?.data || err.message);
       setCart([]);
       setLoading(false);
     }
   };
 
-  
+
 
   useEffect(() => {
     fetchCart();
@@ -134,7 +134,7 @@ const Cart = () => {
             {cart.length === 0 ? (
               <div className="empty-cart">
                 <h3>Your cart is empty</h3>
-                <p>Looks like you haven't added any books to your cart yet.</p>
+                <p>Looks like you haven't added any books to your carts yet.</p>
                 <button
                   className="continue-shopping-btn"
                   onClick={() => navigate("/")}
