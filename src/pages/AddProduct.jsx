@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
-import { PlusCircle, LogOut, Save, X, Upload, Award, TrendingUp, Star, Sparkles, Clock, Tag } from "lucide-react"
+import { PlusCircle, Save, X, Upload, Award, TrendingUp, Star, Sparkles, Clock, Tag } from "lucide-react"
 import "./AddProduct.css"
 
 const AddProduct = () => {
@@ -263,7 +263,6 @@ const AddProduct = () => {
             </>
           )}
         </button>
-        
       </div>
 
       {showForm && (
@@ -278,48 +277,110 @@ const AddProduct = () => {
 
             {/* Basic Information */}
             <h4>Basic Information</h4>
-            {[
-              { label: "Name", name: "name", type: "text", required: true },
-              { label: "Author", name: "author", type: "text" },
-              { label: "Genre", name: "genre", type: "text" },
-              { label: "Publisher", name: "publisher", type: "text" },
-              { label: "ISBN", name: "isbn", type: "text" },
-              { label: "Description", name: "description", type: "textarea" },
-              { label: "Language", name: "language", type: "text" },
-              { label: "Format", name: "format", type: "text" },
-              { label: "Publication Date", name: "publicationDate", type: "date" },
-              { label: "Price", name: "price", type: "number", required: true, step: "0.01", min: "0" },
-              { label: "Stock Quantity", name: "stockQuantity", type: "number", min: "0" },
-            ].map((input) => (
-              <div className="form-group" key={input.name}>
-                <label>
-                  {input.label}
-                  {input.required && " *"}
-                </label>
-                {input.type === "textarea" ? (
-                  <textarea
-                    className="form-control"
-                    name={input.name}
-                    value={form[input.name]}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <input
-                    className="form-control"
-                    type={input.type}
-                    name={input.name}
-                    value={form[input.name]}
-                    onChange={handleChange}
-                    required={input.required || false}
-                    step={input.step || undefined}
-                    min={input.min || undefined}
-                  />
-                )}
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Name *</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                />
               </div>
-            ))}
+              <div className="form-group">
+                <label>Author</label>
+                <input className="form-control" type="text" name="author" value={form.author} onChange={handleChange} />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Genre</label>
+                <input className="form-control" type="text" name="genre" value={form.genre} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label>Publisher</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="publisher"
+                  value={form.publisher}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>ISBN</label>
+                <input className="form-control" type="text" name="isbn" value={form.isbn} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label>Language</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="language"
+                  value={form.language}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Format</label>
+                <input className="form-control" type="text" name="format" value={form.format} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label>Publication Date</label>
+                <input
+                  className="form-control"
+                  type="date"
+                  name="publicationDate"
+                  value={form.publicationDate}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Price *</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  name="price"
+                  value={form.price}
+                  onChange={handleChange}
+                  step="0.01"
+                  min="0"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Stock Quantity</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  name="stockQuantity"
+                  value={form.stockQuantity}
+                  onChange={handleChange}
+                  min="0"
+                />
+              </div>
+            </div>
+
+            <div className="form-group full-width">
+              <label>Description</label>
+              <textarea className="form-control" name="description" value={form.description} onChange={handleChange} />
+            </div>
 
             {/* Availability Options */}
-            <div className="form-group">
+            <div className="form-group checkbox-group">
               <label>
                 <input
                   type="checkbox"
@@ -333,7 +394,7 @@ const AddProduct = () => {
 
             {/* Sale Information */}
             <h4>Sale Information</h4>
-            <div className="form-group">
+            <div className="form-group checkbox-group">
               <label>
                 <input type="checkbox" name="onSale" checked={form.onSale} onChange={handleChange} />
                 On Sale
@@ -341,7 +402,7 @@ const AddProduct = () => {
             </div>
 
             {form.onSale && (
-              <>
+              <div className="form-row">
                 <div className="form-group">
                   <label>Discount Percentage *</label>
                   <input
@@ -378,7 +439,7 @@ const AddProduct = () => {
                     required
                   />
                 </div>
-              </>
+              </div>
             )}
 
             {/* Category Flags */}
@@ -404,21 +465,23 @@ const AddProduct = () => {
             </div>
 
             {/* Product Image */}
-            <div className="form-group">
-              <label>Product Image *</label>
-              <div className="file-input-container">
-                <input
-                  type="file"
-                  id="image-upload"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="form-control file-input"
-                  required={!imageFile}
-                />
-                <label htmlFor="image-upload" className="file-input-label">
-                  <Upload size={18} />
-                  <span>{imageFile ? "Change Image" : "Choose Image"}</span>
-                </label>
+            <div className="form-row image-upload-row">
+              <div className="form-group">
+                <label>Product Image *</label>
+                <div className="file-input-container">
+                  <input
+                    type="file"
+                    id="image-upload"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="form-control file-input"
+                    required={!imageFile}
+                  />
+                  <label htmlFor="image-upload" className="file-input-label">
+                    <Upload size={18} />
+                    <span>{imageFile ? "Change Image" : "Choose Image"}</span>
+                  </label>
+                </div>
               </div>
               {preview && (
                 <div className="image-preview-container">

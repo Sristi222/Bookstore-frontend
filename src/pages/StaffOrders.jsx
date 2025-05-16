@@ -11,9 +11,14 @@ const StaffOrders = () => {
   const [statusFilter, setStatusFilter] = useState("all")
   const [selectedOrder, setSelectedOrder] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
+  const [claimToProcess, setClaimToProcess] = useState(null)
+  const [processingOrder, setProcessingOrder] = useState(false)
+  const [confirmMessage, setConfirmMessage] = useState("")
+  const [notification, setNotification] = useState(null)
 
   const token = localStorage.getItem("token")
-  const API_URL = "https://localhost:7085/api"
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7085/api"
 
   const fetchOrders = async () => {
     try {
@@ -73,27 +78,63 @@ const StaffOrders = () => {
     return matchesSearch && matchesStatus
   })
 
-  const processOrder = async (claimCode) => {
-    const confirm = window.confirm(`Mark order with claim code ${claimCode} as completed?`)
-    if (!confirm) return
+  // Sort orders by date (latest first)
+  const sortedOrders = [...filteredOrders].sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt)
+  })
 
+  const openConfirmModal = (claimCode) => {
+    setClaimToProcess(claimCode)
+    setConfirmMessage(`Mark order with claim code ${claimCode} as completed?`)
+    setIsConfirmModalOpen(true)
+  }
+
+  const closeConfirmModal = () => {
+    setIsConfirmModalOpen(false)
+    setClaimToProcess(null)
+  }
+
+  const processOrder = async (claimCode) => {
+    // Open the custom confirmation modal instead of using window.confirm
+    openConfirmModal(claimCode)
+  }
+
+  const confirmProcessOrder = async () => {
+    if (!claimToProcess) return
+
+    setProcessingOrder(true)
     try {
-      const res = await axios.post(`${API_URL}/Orders/process-claim?claimCode=${claimCode}`, null, {
+      const res = await axios.post(`${API_URL}/Orders/process-claim?claimCode=${claimToProcess}`, null, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      alert(res.data.message || "Order fulfilled.")
 
       // Update the local state to reflect the change
-      setOrders(orders.map((order) => (order.claimCode === claimCode ? { ...order, status: "Completed" } : order)))
+      setOrders(orders.map((order) => (order.claimCode === claimToProcess ? { ...order, status: "Completed" } : order)))
 
       // If the order being processed is currently displayed in the modal, update it
-      if (selectedOrder && selectedOrder.claimCode === claimCode) {
+      if (selectedOrder && selectedOrder.claimCode === claimToProcess) {
         setSelectedOrder({ ...selectedOrder, status: "Completed" })
       }
+
+      // Show success message
+      setIsConfirmModalOpen(false)
+
+      // Show success notification
+      showNotification("Success", res.data.message || "Order fulfilled successfully!")
     } catch (err) {
-      alert(err.response?.data || "Failed to fulfill order.")
+      showNotification("Error", err.response?.data || "Failed to fulfill order.", "error")
       console.error("Error processing claim:", err)
+    } finally {
+      setProcessingOrder(false)
+      setClaimToProcess(null)
     }
+  }
+
+  const showNotification = (title, message, type = "success") => {
+    setNotification({ title, message, type })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000) // Hide after 5 seconds
   }
 
   const openOrderModal = (order) => {
@@ -119,6 +160,12 @@ const StaffOrders = () => {
   return (
     <>
       <h1 className="page-title">Manage Orders</h1>
+
+      {notification && (
+        <div className={`notification ${notification.type}`}>
+          <strong>{notification.title}:</strong> {notification.message}
+        </div>
+      )}
 
       <div className="card">
         <div className="card-header">
@@ -196,14 +243,14 @@ const StaffOrders = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredOrders.length === 0 ? (
+                  {sortedOrders.length === 0 ? (
                     <tr>
                       <td colSpan={7} className="empty-state">
                         No orders found.
                       </td>
                     </tr>
                   ) : (
-                    filteredOrders.map((order) => (
+                    sortedOrders.map((order) => (
                       <tr key={order.id}>
                         <td>#{order.id}</td>
                         <td>{order.userId}</td>
@@ -216,7 +263,10 @@ const StaffOrders = () => {
                         <td>
                           <div className="action-buttons">
                             {order.status !== "Completed" && order.status !== "Cancelled" ? (
-                              <button className="btn btn-primary btn-sm" onClick={() => processOrder(order.claimCode)}>
+                              <button
+                                className="btn btn-primary btn-sm"
+                                onClick={() => openConfirmModal(order.claimCode)}
+                              >
                                 Fulfill
                               </button>
                             ) : (
@@ -338,7 +388,7 @@ const StaffOrders = () => {
             </div>
             <div className="modal-footer">
               {selectedOrder.status !== "Completed" && selectedOrder.status !== "Cancelled" ? (
-                <button className="btn btn-primary" onClick={() => processOrder(selectedOrder.claimCode)}>
+                <button className="btn btn-primary" onClick={() => openConfirmModal(selectedOrder.claimCode)}>
                   Fulfill Order
                 </button>
               ) : (
@@ -379,8 +429,93 @@ const StaffOrders = () => {
           </div>
         </div>
       )}
+
+      {/* Confirmation Modal */}
+      {isConfirmModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-container confirmation-modal">
+            <div className="modal-header">
+              <h3>Confirm Action</h3>
+              <button className="modal-close-btn" onClick={closeConfirmModal}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div className="modal-content">
+              <p>{confirmMessage}</p>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-primary" onClick={confirmProcessOrder} disabled={processingOrder}>
+                {processingOrder ? (
+                  <>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="loading-icon"
+                    >
+                      <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                    </svg>
+                    Processing...
+                  </>
+                ) : (
+                  "Confirm"
+                )}
+              </button>
+              <button className="btn btn-outline" onClick={closeConfirmModal}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Notification Toast */}
+      {notification && (
+        <div className={`notification-toast ${notification.type}`}>
+          <div className="notification-header">
+            <h4>{notification.title}</h4>
+            <button className="notification-close" onClick={() => setNotification(null)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+          <p>{notification.message}</p>
+        </div>
+      )}
     </>
   )
 }
 
 export default StaffOrders
+

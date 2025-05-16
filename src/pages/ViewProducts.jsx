@@ -353,38 +353,60 @@ const ViewProducts = () => {
           <div className="table-wrapper">
             <table className="product-table">
               <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Author</th>
-                  <th>Genre</th>
-                  <th>Price</th>
-                  <th>Stock</th>
-                  <th>On Sale</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product) => (
-                  <tr key={product.id}>
-                    <td>{product.id}</td>
-                    <td>{product.name}</td>
-                    <td>{product.author}</td>
-                    <td>{product.genre}</td>
-                    <td>Rs. {product.price}</td>
-                    <td>{product.stockQuantity}</td>
-                    <td>{product.onSale ? "Yes" : "No"}</td>
-                    <td>
-                      <button className="btn-edit" onClick={() => openEditModal(product)}>
-                        <Pencil size={18} />
-                      </button>
-                      <button className="btnDelete" onClick={() => deleteProduct(product.id)}>
-                        <Trash2 size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+  <tr>
+    <th>ID</th>
+    <th>Image & Name</th> {/* <-- updated */}
+    <th>Author</th>
+    <th>Genre</th>
+    <th>Price</th>
+    <th>Stock</th>
+    <th>On Sale</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+<tbody>
+  {products.map((product) => (
+    <tr key={product.id}>
+      <td>{product.id}</td>
+      <td>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          {product.image && (
+            <img
+              src={
+                product.image.startsWith("/uploads")
+                  ? `https://localhost:7085${product.image}`
+                  : product.image
+              }
+              alt={product.name}
+              style={{
+                width: "40px",
+                height: "40px",
+                objectFit: "cover",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+              }}
+            />
+          )}
+          <span>{product.name}</span>
+        </div>
+      </td>
+      <td>{product.author}</td>
+      <td>{product.genre}</td>
+      <td>Rs. {product.price}</td>
+      <td>{product.stockQuantity}</td>
+      <td>{product.onSale ? "Yes" : "No"}</td>
+      <td>
+        <button className="btn-edit" onClick={() => openEditModal(product)}>
+          <Pencil size={18} />
+        </button>
+        <button className="btnDelete" onClick={() => deleteProduct(product.id)}>
+          <Trash2 size={18} />
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
             </table>
           </div>
         )}

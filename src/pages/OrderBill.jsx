@@ -14,6 +14,9 @@ const OrderBill = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState(null)
+  const [discountAmount, setDiscountAmount] = useState(0) // Store the discount amount
+  const [subtotal, setSubtotal] = useState(0)
+  const [discountReasons, setDiscountReasons] = useState([])
 
   const navigate = useNavigate()
 
@@ -30,11 +33,68 @@ const OrderBill = () => {
       }, 2000)
     } else {
       setCart(storedCart)
-      const totalPrice = storedCart.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
-      setTotal(totalPrice)
-      setLoading(false)
+
+      // Calculate total price before discounts
+      const subtotal = storedCart.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+
+      // Fetch user's order history to check for loyalty discount
+      const fetchOrderHistory = async () => {
+        try {
+          const res = await axios.get(`${API_URL}/Orders?userId=${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+
+          // Count completed orders
+          const completedOrders = res.data.filter((order) => order.status === "Completed")
+          const completedOrdersCount = completedOrders.length
+
+          // Calculate discounts
+          let discount = 0
+          const discountReasons = []
+
+          // Volume discount: 5% for ordering 5+ books
+          const totalQuantity = storedCart.reduce((sum, item) => sum + item.quantity, 0)
+          if (totalQuantity >= 5) {
+            discount += subtotal * 0.05 // 5% discount
+            discountReasons.push("5% volume discount (5+ books)")
+          }
+
+          // Loyalty discount: 10% after 10 completed orders
+          if (completedOrdersCount >= 10) {
+            discount += subtotal * 0.1 // 10% discount
+            discountReasons.push("10% loyalty discount (10+ completed orders)")
+          }
+
+          setDiscountAmount(discount)
+          setDiscountReasons(discountReasons)
+
+          // Update total with discount
+          setTotal(subtotal - discount)
+          setSubtotal(subtotal)
+          setLoading(false)
+        } catch (err) {
+          console.error("Error fetching order history:", err)
+          // If we can't fetch order history, just apply the volume discount
+          const totalQuantity = storedCart.reduce((sum, item) => sum + item.quantity, 0)
+          let discount = 0
+          const discountReasons = []
+
+          if (totalQuantity >= 5) {
+            discount = subtotal * 0.05 // 5% discount
+            discountReasons.push("5% volume discount (5+ books)")
+          }
+
+          setDiscountAmount(discount)
+          setDiscountReasons(discountReasons)
+          setTotal(subtotal - discount)
+          setSubtotal(subtotal)
+          setLoading(false)
+        }
+      }
+
+      fetchOrderHistory()
     }
-  }, [navigate])
+  }, [navigate, API_URL, userId, token])
 
   const openConfirmModal = () => {
     setShowConfirmModal(true)
@@ -125,8 +185,8 @@ const OrderBill = () => {
               your order.
             </p>
             <div className="note">
-              <strong>Note:</strong> Your order can be cancelled from your order history page until it's processed by our
-              staff.
+              <strong>Note:</strong> Your order can be cancelled from your order history page until it's processed by
+              our staff.
             </div>
           </div>
 
@@ -165,8 +225,37 @@ const OrderBill = () => {
               </tbody>
               <tfoot>
                 <tr>
-                  <td colSpan="3">Total</td>
-                  <td>Rs. {total.toFixed(2)}</td>
+                  <td colSpan="3" className="text-right">
+                    Subtotal
+                  </td>
+                  <td>Rs. {subtotal.toFixed(2)}</td>
+                </tr>
+                {discountAmount > 0 && (
+                  <>
+                    <tr className="discount-row">
+                      <td colSpan="3" className="text-right">
+                        Discount
+                      </td>
+                      <td className="discount-amount">- Rs. {discountAmount.toFixed(2)}</td>
+                    </tr>
+                    {discountReasons.map((reason, idx) => (
+                      <tr key={idx} className="discount-reason-row">
+                        <td colSpan="4" className="discount-reason">
+                          <small>
+                            <i>{reason}</i>
+                          </small>
+                        </td>
+                      </tr>
+                    ))}
+                  </>
+                )}
+                <tr className="final-total-row">
+                  <td colSpan="3" className="text-right">
+                    <strong>Final Total</strong>
+                  </td>
+                  <td>
+                    <strong>Rs. {total.toFixed(2)}</strong>
+                  </td>
                 </tr>
               </tfoot>
             </table>
@@ -189,8 +278,6 @@ const OrderBill = () => {
           <div className="confirmation-modal">
             <h2>Confirm Your Order</h2>
             <p>Are you sure you want to place this order for Rs. {total.toFixed(2)}?</p>
-            
-
             <div className="modal-actions">
               <button className="cancel-btn" onClick={closeConfirmModal} disabled={isProcessing}>
                 Cancel
